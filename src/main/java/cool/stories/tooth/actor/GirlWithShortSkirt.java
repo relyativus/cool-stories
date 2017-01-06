@@ -10,8 +10,8 @@ import java.math.BigDecimal;
  * which is good for selling products to lonely
  * boys
  */
-public class GirlWithShortSkirt implements Seller, BaseActor {
-    private static final String SELLER_PHRASE = "Девочка в коротенькій юпочці: Привіт. Чи не бажали б ви купити %s. " +
+public class GirlWithShortSkirt extends SellerActor {
+    private static final String SELLER_PHRASE = "Привіт. Чи не бажали б ви купити %s. " +
             "Дуже хороший виробник. Коштує всього %s";
 
     private Product product;
@@ -20,10 +20,14 @@ public class GirlWithShortSkirt implements Seller, BaseActor {
 
     private boolean hasProduct;
 
+    public GirlWithShortSkirt() {
+        super("Дєвочка в коротенькій юпочці");
+    }
+
     @Override
     public void setTargetProduct(Product product) {
         this.product = product;
-        this.hasProduct = true;
+        hasProduct = true;
     }
 
     @Override
@@ -34,8 +38,8 @@ public class GirlWithShortSkirt implements Seller, BaseActor {
     @Override
     public void sellProduct(Buyer buyer) {
         if (hasProduct) {
-            System.out.println(String.format(SELLER_PHRASE, product.getName(),
-                    PriceFormatter.format(product.getPrice())));
+            walk(buyer);
+            say(String.format(SELLER_PHRASE, product.getName(), PriceFormatter.format(product.getPrice())));
             buyer.checkProduct(product);
             sellProductIfInterested(buyer);
         }
@@ -47,30 +51,22 @@ public class GirlWithShortSkirt implements Seller, BaseActor {
     }
 
     @Override
-    public String getName() {
-        return "Дєвочка в коротенькій юпочці";
-    }
-
-    @Override
-    public String getStateDescription() {
-        return "пішла";
-    }
-
-    @Override
     public void sayResult() {
         if (isProductSold()) {
-            System.out.println(String.format("%s: Ура! Продукт продано ^_^", getName()));
+            say("Ура! Продукт продано ^_^");
         } else {
-            System.out.println(String.format("%s: Йду я від вас...", getName()));
+            say("Йду я від вас...");
+            walk();
+            setState(State.GONE);
         }
     }
 
-    private void sellProductIfInterested(final Buyer buyer) {
+    private void sellProductIfInterested(Buyer buyer) {
         if (buyer.isInterested()) {
-            this.earnedMoney = earnedMoney.add(buyer.buyProduct(product));
-            this.hasProduct = false;
-            this.product = null;
-            System.out.println("Дуже дякую. Ти такий класний... Не хочеш заїхати до мене?");
+            earnedMoney = earnedMoney.add(buyer.buyProduct(product));
+            hasProduct = false;
+            product = null;
+            say("Дуже дякую. Ти такий класний... Не хочеш заїхати до мене?");
         }
     }
 

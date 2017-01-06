@@ -1,5 +1,6 @@
 package cool.stories.tooth.actor;
 
+import cool.stories.tooth.console.PrintLikePro;
 import cool.stories.tooth.product.Product;
 
 import java.math.BigDecimal;
@@ -11,13 +12,18 @@ import java.util.stream.Collectors;
  * from a seller which looks like a girl.
  * Telling pick-up phrases is the common behaviour of this actor
  */
-public class Oleh implements Buyer, StoryTeller {
+public class Oleh extends BuyerActor implements StoryTeller {
     private static final String PICKUP_PHRASE = "...";
     private static final String ACTOR_STATE = "Підходить до %s - %s";
     private static final String NEW_LINE = "\n";
-    private static final String STORY_MESSAGE = "%s: Сижу я, %s. І тут заходить %s, сімпатічній..." +
+    private static final String STORY_MESSAGE = "Сижу я, %s." +
+            "\nІ тут заходить %s, сімпатічній..." +
             "\nПродає %s. \n%s" +
-            "\nА я %s, і тут %s %s...";
+            "\nА я %s, і тут %s...";
+
+    public Oleh() {
+        super("Олег");
+    }
 
     @Override
     public void checkProduct(Product product) {
@@ -35,27 +41,23 @@ public class Oleh implements Buyer, StoryTeller {
     }
 
     @Override
-    public void tellTheStory(final Seller seller, final List<BaseActor> storyActors) {
+    public void tellTheStory(Seller seller, List<BaseActor> storyActors) {
         String actorsNames = prepareActorNames(storyActors);
         String actorsState = prepareActorsState(storyActors);
-
-        System.out.println(
+        setState(State.TELL);
+        System.out.println();
+        System.out.println(getFormattedStateDescription() + ": ");
+        PrintLikePro.println(
                 String.format(STORY_MESSAGE,
-                        getName(),
                         actorsNames,
                         seller.getName(),
                         seller.getProduct().getName(),
                         actorsState,
                         getStateDescription(),
-                        seller.getName(),
                         seller.getStateDescription()
-                )
+                ), 100
         );
-    }
-
-    @Override
-    public String getName() {
-        return "Олег";
+        System.out.println();
     }
 
     @Override
@@ -63,12 +65,12 @@ public class Oleh implements Buyer, StoryTeller {
         return "чекаю своєї черги";
     }
 
-    private String prepareActorNames(final List<BaseActor> actors) {
+    private String prepareActorNames(List<BaseActor> actors) {
         return actors.stream().map(BaseActor::getName)
                 .collect(Collectors.joining(", "));
     }
 
-    private String prepareActorsState(final List<BaseActor> actors) {
+    private String prepareActorsState(List<BaseActor> actors) {
         StringBuilder actorsState = new StringBuilder();
         actors.subList(0, actors.size() -1).forEach(actor -> {
             actorsState.append(String.format(ACTOR_STATE, actor.getName(), actor.getStateDescription()));

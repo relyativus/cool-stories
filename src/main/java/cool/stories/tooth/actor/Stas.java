@@ -14,25 +14,27 @@ import java.util.List;
  * has enough money in his wallet.
  * Freezing is common behaviour for this actor
  */
-public class Stas implements Buyer {
-    private static final String EXPENSIVE_PHRASE = "%s: Хммм... %s дуже дорого за %s. Я не буду купувати";
-    private static final String FREEZE_PHRASE = "%s: Морожусь...";
-    private static final String BUYER_PHRASE = "%s: Хм...Це цікаво. Мабуть, я куплю %s";
+public class Stas extends BuyerActor {
+    private static final String EXPENSIVE_PHRASE = "Хммм... %s дуже дорого за %s. Я не буду купувати";
+    private static final String BUYER_PHRASE = "Хм...Це цікаво. Мабуть, я куплю %s";
     private static final BigDecimal PRICE_LIMIT = BigDecimal.TEN;
 
     private boolean interested = false;
     private BigDecimal wallet = BigDecimal.TEN;
     private List<Product> products = new ArrayList<>();
 
+    public Stas() {
+        super("Стас");
+    }
+
     @Override
     public void checkProduct(Product product) {
         if (product.getPrice().compareTo(PRICE_LIMIT) > 0 && hasMoney()) {
-            System.out.println(String.format(EXPENSIVE_PHRASE, getName(), PriceFormatter.format(product.getPrice()),
-                    product.getName()));
-            System.out.println(String.format(FREEZE_PHRASE, getName()));
+            say(String.format(EXPENSIVE_PHRASE, PriceFormatter.format(product.getPrice()), product.getName()));
+            fallOnMoroz();
             this.interested = false;
         } else {
-            System.out.println(String.format(BUYER_PHRASE, getName(), product.getName()));
+            say(String.format(BUYER_PHRASE, product.getName()));
             this.interested = true;
         }
     }
@@ -47,16 +49,6 @@ public class Stas implements Buyer {
         this.products.add(product);
         this.wallet = this.wallet.min(product.getPrice());
         return product.getPrice();
-    }
-
-    @Override
-    public String getName() {
-        return "Cтас";
-    }
-
-    @Override
-    public String getStateDescription() {
-        return "починає морозитись";
     }
 
     private boolean hasMoney() {
