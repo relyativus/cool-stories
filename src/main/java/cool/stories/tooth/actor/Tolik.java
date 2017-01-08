@@ -8,7 +8,11 @@ import java.math.BigDecimal;
  * Represents a passive buyer.
  * Writing <strong>beranked</strong> is the common behaviour of this actor
  */
-public class Tolik implements Buyer {
+public class Tolik extends BuyerActor {
+
+    public Tolik() {
+        super("Толік");
+    }
 
     @Override
     public String getName() {

@@ -9,16 +9,18 @@ import java.math.BigDecimal;
  * sellers want to sold to him.
  * Starting philosophy is the common behaviour for this actor
  */
-public class Serhii implements Buyer, BaseActor {
-    private static final String PHILOSOPHY_PHRASE = "%s: Бути чи не бути - от в чому питання. " +
+public class Serhii extends BuyerActor {
+    private static final String PHILOSOPHY_PHRASE = "Бути чи не бути - от в чому питання. " +
             "Не треба мені ваш %s";
-    private static final String PHILOSOPHY_STATE = "%s: Філософствую...";
 
+    public Serhii() {
+        super("Сергій");
+    }
 
     @Override
     public void checkProduct(Product product) {
-        System.out.println(String.format(PHILOSOPHY_PHRASE, getName(), product.getName()));
-        System.out.println(String.format(PHILOSOPHY_STATE, getName()));
+        say(String.format(PHILOSOPHY_PHRASE, product.getName()));
+        startPhilosophy();
     }
 
     @Override
@@ -29,15 +31,5 @@ public class Serhii implements Buyer, BaseActor {
     @Override
     public BigDecimal buyProduct(Product product) {
         return BigDecimal.ZERO;
-    }
-
-    @Override
-    public String getName() {
-        return "Сєрий";
-    }
-
-    @Override
-    public String getStateDescription() {
-        return "почав філософствувати";
     }
 }
