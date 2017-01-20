@@ -19,7 +19,7 @@ public class Main {
         GirlWithShortSkirt seller = new GirlWithShortSkirt();
         seller.setTargetProduct(product);
 
-        Oleh oleh = new Oleh();
+        Oleg oleg = new Oleg();
         Stas stas = new Stas();
         Serhii serhii = new Serhii();
         Tolik tolik = new Tolik();
@@ -27,11 +27,11 @@ public class Main {
         SellerChain sellerChain = new SellerChain(seller);
         sellerChain.addBuyer(stas);
         sellerChain.addBuyer(serhii);
-        sellerChain.addBuyer(oleh);
+        sellerChain.addBuyer(oleg);
         sellerChain.addBuyer(tolik);
 
         sellerChain.doChain();
 
-        oleh.tellTheStory(seller, Arrays.asList(stas, serhii, tolik));
+        oleg.tellTheStory(seller, Arrays.asList(stas, serhii, tolik));
     }
 }

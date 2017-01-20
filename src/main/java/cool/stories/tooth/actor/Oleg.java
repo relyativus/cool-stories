@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
  * from a seller which looks like a girl.
  * Telling pick-up phrases is the common behaviour of this actor
  */
-public class Oleh extends BuyerActor implements StoryTeller {
+public class Oleg extends BuyerActor implements StoryTeller {
     private static final String PICKUP_PHRASE = "...";
     private static final String ACTOR_STATE = "Підходить до %s - %s";
     private static final String NEW_LINE = "\n";
@@ -21,7 +21,7 @@ public class Oleh extends BuyerActor implements StoryTeller {
             "\nПродає %s. \n%s" +
             "\nА я %s, і тут %s...";
 
-    public Oleh() {
+    public Oleg() {
         super("Олег");
     }
 
